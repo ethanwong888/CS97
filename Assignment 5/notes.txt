@@ -1,0 +1,161 @@
+﻿Ethan Wong
+CS97
+Assignment 5
+11/20/2020
+
+
+Getting Started
+- Install 7-zip and extract  randall-assignment.txz
+- Open extracted folder in repl.it (using IDE now, transfer files to SEASnet later)
+- Change -fanalyzer to -fsanitize=address in Makefile (play around with this command)
+- Run “make” command to build 
+- Use ./randall to try it out
+- try ./randall 100 or with random argument to see if it works
+
+
+
+make check
+- Create a check in the Makefile that sees if correct # of characters print out
+- check:
+  if [ `./randall 10 | wc -c` -eq 10 ]; \
+  then echo "test passed -> ./randall 10 "; \
+  else echo "test failed -> ./randall 10 "; \
+  fi;
+
+
+
+Creating separate modules
+- Use touch command to create new files
+- Name files according to the spec
+- Move function definitions into corresponding .c files
+- Move function declarations into corresponding .h files
+- Remove excess libraries from new files 
+- Include .h files in randall.c
+- Use make check periodically to see if code is working properly 
+
+
+
+Adding input and output options
+- Finally start to add code into options.c, options.h
+- Include all necessary libraries, options.h into options.c
+- Use getopt example from discussion
+- Create function in options.c that acts differently based on option
+- void read_options(int argc, char- argv[], struct opts- opts) {
+  opts->valid = false;
+  int i;
+  
+  while ((i = getopt(argc, argv, ":i:o:")) != -1) {
+    switch(i) {
+      case 'i':
+        if (strcmp("rdrand", optarg) == 0) {
+          opts->input = RDRAND;
+        } 
+        else if (strcmp("mrand48_r", optarg) == 0) {
+          opts->input = MRAND48_R;
+        } 
+        else if ('/' == optarg[0]) {
+          opts->input = SLASH_F;
+          opts->r_src = optarg;
+        } 
+        else {
+          break;
+        }
+        opts->valid = true;
+        break;
+
+
+      case 'o':
+        if (strcmp("stdout", optarg) == 0) {
+          opts->output = STDOUT;
+        } 
+        else {
+          opts->output = N;
+          opts->block_size = atoi(optarg);
+        }
+        opts->valid = true;
+        break;
+
+
+      case ':':
+        break;
+
+
+      case '?':
+        break;
+    }
+  }
+- Essentially function is while loop with switch statement
+- Checks for -i or -o (input or output flag)
+- Acts accordingly in switch statement based on the flag
+- For input: rdrand, mrand48_r, /
+- For output: stdio, N
+- case ‘:’ and case’?’ are kind of default for getopt functions
+
+
+
+Dealing with cases in int main()
+- Have to acknowledge the cases inside of int main()
+- Go into randall.c
+- Adjust int main so that it calls proper libraries/functions for each option
+- Write additional functions if necessary (/F, mrand48_r input options)
+- Everything besides int main and functions should be commented out
+- Include error checking to exit for unusable options/ user inputs
+
+
+
+More make check cases
+- Created a lot more options now
+- Create additional test cases with make check
+- Create a test case for each new option
+- Create extra test cases that use multiple options (one -i option, one -o option)
+- Make sure that the cases work as expected
+- Should pass all cases when running “make check”
+- test cases looks similar to the one from above
+- Output of my make check command:
+test passed : ./randall 200
+test passed : ./randall -i rdrand 200
+test passed : ./randall -i /dev/urandom 200
+test passed : ./randall -i mrand48_r 200
+test passed : ./randall -o stdio 200
+test passed : ./randall -i mrand48_r -o 1 2500
+test passed : ./randall -o 2 4500
+test passed : ./randall -i /dev/urandom -o stdio 200
+test passed : ./randall -i rdrand -o 1 200
+
+
+
+Results for time commands
+- Transfer files to SEASNet using FileZilla
+- make project in there, same method as in IDE
+- run provided time commands 
+Command: time dd if=/dev/urandom ibs=8192 obs=8192 count=16384 >/dev/null
+Output: 
+16384+0 records in
+16384+0 records out
+134217728 bytes (134 MB, 128 MiB) copied, 0.895805 s, 150 MB/s
+
+
+real    0m0.900s
+user    0m0.014s
+sys     0m0.884s
+
+
+Command: time ./randall 133562368 >/dev/null
+Output: 
+real    0m2.950s
+user    0m2.938s
+sys     0m0.012s
+
+
+Command: time ./randall 133562368 | cat >/dev/null
+Output:
+real    0m3.088s
+user    0m3.064s
+sys     0m0.188s
+
+
+Command: time ./randall 133562368 >rand.data
+Output: 
+real    0m5.843s
+user    0m2.887s
+sys     0m0.148s
