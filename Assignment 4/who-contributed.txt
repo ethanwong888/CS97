@@ -1,0 +1,7 @@
+Run the following commands inside the tz directory:
+git grep "Even newspaper reports present contradictory information."
+git blame northamerica | grep "Even newspaper reports present contradictory information."
+
+
+Result of the investigation:
+c8f960ec (Paul Eggert        2013-09-02 08:09:06 -0700  890) # and wrote "Even newspaper reports present contradictory information."

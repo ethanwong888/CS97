@@ -1,0 +1,32 @@
+#!/bin/bash
+#this is meant to be run inside of the tz directory to work as intended
+cp /dev/stdin temp
+x=12
+while [ $x -ge 10 ]
+do
+        printf "%s%s%s" "-" "$x" "00 "
+	grep -o "\-${x}00" temp | wc -l | tr -d ' '
+        x=$(($x - 1))
+	done
+while [ $x -ge 1 ]
+do
+        printf "%s%s%s" "-0" "$x" "00 "
+	grep -o "\-0${x}00" temp | wc -l | tr -d ' '
+        x=$(( $x - 1 ))
+	done
+printf "%s%s" "0$x" "00 "
+grep -o "$0{x}00" temp | wc -l | tr -d ' '
+x=$(($x + 1))
+while [ $x -le 9 ]
+do
+        printf "%s%s%s" "+0" "$x" "00 "
+	grep -o "\+0${x}00" temp | wc -l | tr -d ' '
+        x=$(($x + 1))
+	done
+while [ $x -le 14 ]
+do
+        printf "%s%s%s" "+" "$x" "00 "
+	grep -o "\+${x}00" temp | wc -l | tr -d ' '
+        x=$(($x + 1))
+	done
+rm temp

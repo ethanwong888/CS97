@@ -1,0 +1,21 @@
+1) This first mergepoint merges something called remotes/origin/feature/native-comp 
+   back into the main branch, or master branch. Basically there has been a change in 
+   the documentation and someone has been working on these changes in a branch. Once
+   they finished, they wanted to merge their changes back to the master branch.
+2) The drawing for this question can be found in emacs-graph.pdf. I did not include 
+   the entire hash for the commits as they are very long; I just included the first 
+   few characters of each hash as a label. 
+3) There are a couple main differences between the Emacs git repository from Savannah
+   and the one in ~eggert/src/gnu/emacs. First, the Savannah repository only has one 
+   master branch while the ~eggert/src/gnu/emacs repository has dozens of branches. 
+   Secondly, the Savannah repository seems like it has been updated more recently. At 
+   the time I checked, it has been updated on 11/10/2020 while the 
+   ~eggert/src/gnu/emacs had its last update on 11/3/2020.
+
+
+*DISCLAIMER*
+I completed this assignment a few days before the deadline.
+I do not know if additional commits were created after I 
+finished, but my data and assignments were made to reflect
+the information available to me at the time I was working
+on the assignment.

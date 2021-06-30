@@ -1,0 +1,5 @@
+#!/bin/bash
+#this is meant to be run outside of tz (hence the cd tz)
+
+cd tz
+git diff HEAD~1 HEAD

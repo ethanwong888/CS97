@@ -1,0 +1,5 @@
+#!/bin/bash
+#this is meant to be run outside of tz (the script will cd into tz on its own before using git diff)
+
+cd tz
+git diff $1 $2
