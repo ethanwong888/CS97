@@ -1,0 +1,134 @@
+﻿Ethan Wong
+
+Chorus Lapilli will built based off of the tic-tac-toe game
+Follow the modifications here to change tic-tac-toe into chorus lapilli
+
+
+Getting Started
+- Create a new React app
+- Follow the instructions in tic-tac-toe.txt
+- Make sure your app can run the tic-tac-toe game properly
+
+
+
+
+Transforming tic-tac-toe into chorus lapilli
+- The majority of the changes will occur in “Game”
+- Add new components to the state in the Game constructor
+- xTurns: 0,
+  oTurns: 0,
+  clicked: null,
+- This keeps track of how many turns have gone by for each player
+- clicked keeps track of which square on the board gets clicked
+- Create a function that helps determine if surrounding squares are filled
+- Place this new function below the calculateWinner function
+- function surrounding(i) {
+  let surroundings = [[1,3,4], [0,2,3,4,5], [1,4,5], [0,1,4,6,7], 
+  [0,1,2,3,5,6,7,8], [1,2,4,7,8], [3,4,7], [3,4,5,6,8], [4,5,7]]
+  return surroundings[i]
+}
+- Function will be used in handleClick
+
+
+
+
+Adjusting handleClick
+- A lot of changes need to be made in the handleClick method
+- Modify very first if statement to
+- if (calculateWinner(squares) || 
+  (this.state.xIsNext && squares[i] === "O") || 
+  (!this.state.xIsNext && squares[i] === "X")) {
+      return;
+    }
+- This stops game if someone wins
+- Also prevents a player from modifying other player’s pieces
+- Add if statement that stops more pieces from being placed after first 6 
+- Same code as in tic-tac-toe, just added the if statement and turn-counting
+- if (this.state.xTurns < 3 || this.state.oTurns < 3) {
+        squares[i] = this.state.xIsNext ? "X" : "O";
+        if (this.state.xIsNext) {
+            this.state.xTurns += 1;
+        }
+        else {
+            this.state.oTurns += 1;
+        }
+        this.setState({
+        history: history.concat([
+            {
+            squares: squares
+            }
+        ]),
+        stepNumber: history.length,
+        xIsNext: !this.state.xIsNext
+        });
+    }
+
+
+- Now create implementation to move already placed pieces
+- Place this code below the code from above
+-    else {
+      if (squares[i] === "X" && this.state.xIsNext) {
+        this.state.clicked = i; 
+        return
+      }
+      if (squares[i]=== "O" && !this.state.xIsNext) {
+        this.state.clicked = i; 
+        return
+      }
+
+      if (this.state.clicked !== null){       
+        //array of surrounding squares
+        let temp = surrounding(this.state.clicked)
+        let empty = []
+        let j
+        for (j of temp){
+          if (squares[j] === null) {
+            empty.push(j)
+          }
+        }
+        if (empty.includes(i)) { 
+          let tmp = squares.slice()
+          squares[i] = this.state.xIsNext ? "X" : "O";
+          squares[this.state.clicked] = null;        
+          if (calculateWinner(squares)) {
+            
+          }          
+          else if (this.state.xIsNext && tmp[4] === "X" 
+		&& this.state.clicked !== 4) {
+            return
+          }
+          else if (!this.state.xIsNext && tmp[4] === "O" 
+		&& this.state.clicked !== 4) {
+            return
+          }
+          
+          this.setState({
+            history: history.concat([
+                {
+                squares: squares
+                }
+            ]),
+            stepNumber: history.length,
+            xIsNext: !this.state.xIsNext
+            });
+        }
+      }  
+    }
+- This code does a lot of different things
+- First, allow player to select one of their already placed pieces
+- Store that selected piece in this.state.clicked
+- Once they select a piece, check which squares surrounding it are empty
+- Check using a for loop and surrounding(i) function implemented earlier
+- Click on one of these empty squares to move the selected piece there
+- Clear out the square that was occupied previously
+- If current player has a piece in the middle they must select that piece
+- Only exception is if they can move another piece and win from that
+- Check if player’s next move will win by “slicing” a new board
+- Check this new board to see if the move will allow a win
+- If not, don’t allow the move — player must select and move center piece
+- Use setState to change the actual game board, track history
+- Keep track of past moves/ history in same way as tic-tac-toe
+- The rest of the code should be identical to tic-tac-toe
+
+
+After adding this code, you will now have a working chorus lapilli game.
