@@ -1,4 +1,4 @@
 # CS97
 Assignments for CS97
 
-Done by Ethan Wong in Fall 2020 @ UCLA
+Taken in Fall 2020 @ UCLA with Professor Paul Eggert
